@@ -15,7 +15,6 @@ mainScene.addObject('player', components=playerComps)
 mainScene.addObject('enemySpawner', components=[EnemySpawner()])
 mainScene.addObject('ammunitionSpawner', components=[AmmunitionSpawner()])
 
-
 # HITBOX
 SEAS.createHitboxGroup('Player', True)
 SEAS.createHitboxGroup('Bullet', True)
@@ -24,7 +23,8 @@ SEAS.addRawNameHitboxGroup('Player', ['player'])
 SEAS.addRawNameHitboxGroup('Ammo', ['player'])
 
 # FONTS
-rFont = SEAS.getCoreModule('Font').createFont('regularFont', fontSize=20)
+SEAS.getCoreModule('Font').createFont('regularFont', fontSize=20)
+SEAS.getCoreModule('Font').createFont('gmFont', fontSize=70)
 
 
 # MATERIALS

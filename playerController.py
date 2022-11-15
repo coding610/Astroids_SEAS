@@ -22,9 +22,16 @@ class PlayerController:
 
     def checkDeath(self):
         if self.coll.collide[0] and self.coll.collide[1] == 'Player':
-            print("GAME OVER")
-            sys.exit()
-
+            SEAS.getScene().removeAllObject()
+            SEAS.getScene().removeAllText()
+            SEAS.getScene().addText(
+                    font=SEAS.getCoreModule('Font').getFont('gmFont'),
+                    textName='GameOver title',
+                    text="GAME OVER!",
+                    color="#ffffff",
+                    position=[
+                            SEAS.getCoreModule('Screen').wW // 2,
+                            SEAS.getCoreModule('Screen').wW // 2])
 
     def checkRotations(self):
         if SEAS.input('a'):
@@ -71,11 +78,13 @@ class PlayerShooter:
         self.updateVars()
         self.shootBullet()
         self.checkAmmo()
-        SEAS.getScene().updateText(
-                font=SEAS.getCoreModule('Font').getFont('regularFont'),
-                textName='bulletCount',
-                text="Bullets: " + str(self.bulletCount),
-                color="#ffffff")
+
+        if 'bulletCount' in SEAS.getScene().texts:
+            SEAS.getScene().updateText(
+                    font=SEAS.getCoreModule('Font').getFont('regularFont'),
+                    textName='bulletCount',
+                    text="Bullets: " + str(self.bulletCount),
+                    color="#ffffff")
 
     def checkAmmo(self):
         if self.coll.collide[0] and self.coll.collide[1] == "Ammo":
