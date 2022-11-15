@@ -61,7 +61,7 @@ class PlayerShooter:
         SEAS.getScene().addText(
                 font=SEAS.getCoreModule('Font').getFont('regularFont'),
                 textName='bulletCount',
-                text=str(self.bulletCount),
+                text="Bullets: " + str(self.bulletCount),
                 color="#ffffff",
                 position=[
                         SEAS.getCoreModule('Screen').wW // 2,
@@ -74,7 +74,7 @@ class PlayerShooter:
         SEAS.getScene().updateText(
                 font=SEAS.getCoreModule('Font').getFont('regularFont'),
                 textName='bulletCount',
-                text=str(self.bulletCount),
+                text="Bullets: " + str(self.bulletCount),
                 color="#ffffff")
 
     def checkAmmo(self):
