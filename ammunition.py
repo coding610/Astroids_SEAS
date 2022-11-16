@@ -15,26 +15,32 @@ class AmmunitionSpawner:
 
         self.ammoSize = 2
 
+        self.maxAmmo = 3
+        self.totalAmmo = 0
+
     def update(self):
         self.aCounter -= SEAS.deltaTime
-
-        if self.aCounter <= 0:
-            self.spawnA()
+        if self.aCounter <= 0 and self.totalAmmo <= self.maxAmmo:
+            self.spawnA([random.randint(1, SEAS.getCoreModule('Screen').wW), random.randint(1, SEAS.getCoreModule('Screen').wH)])
             self.aCounter = 3
+            self.totalAmmo += 1
 
-    def spawnA(self):
-        cords = self.transformShape()
+    def spawnA(self, cent):
+        cords = self.transformShape(cent)
         SEAS.getScene().addObject('Ammunition', components=[TransformPoly(cords), RenderPoly(), CollidePoly(), HitboxPoly(), Ammunition()])
 
-    def transformShape(self):
+    def transformShape(self, cent):
         cords = np.multiply(self.ammoShape, self.ammoSize)
         cordsX = []
         cordsY = []
+
         for c in cords:
             cordsX.append(c[0])
             cordsY.append(c[1])
-        cordsX = np.add(cordsX, random.randint(1, SEAS.getCoreModule('Screen').wW))
-        cordsY = np.add(cordsY, random.randint(1, SEAS.getCoreModule('Screen').wH))
+
+        cordsX = np.add(cordsX, cent[0])
+        cordsY = np.add(cordsY, cent[1])
+
         cords = []
         for x, y in zip(cordsX, cordsY):
             cords.append([x, y])

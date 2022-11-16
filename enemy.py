@@ -1,15 +1,15 @@
-from SEAS import *
-import random
-import numpy as np
 import math
+import random
 import sys
 
+import numpy as np
+from SEAS import *
 
 class EnemySpawner:
     def start(self):
         self.spawnCounter = 0
-        self.spawnLimit = 2
-        self.maxEnemies = 5
+        self.spawnLimit = 6
+        self.maxEnemies = 200
         self.totalEnemies = 0
             
         self.enemyShape = [
@@ -48,11 +48,14 @@ class EnemySpawner:
             self.spawnCounter = 0
             self.totalEnemies += 1
 
+
 class Enemy:
     def start(self):
         self.trns = SEAS.getScene().getComponent('TransformPoly')
         self.coll = SEAS.getScene().getComponent('CollidePoly')
         self.ctrl = SEAS.getScene().getComponent('CharacterPolyController')
+        self.shtr = SEAS.getScene().getRawComponent('enemySpawner', 'EnemySpawner')
+        self.pkll = SEAS.getScene().getRawComponent('player', 'PlayerKill')
 
         # ADD ME TO HITBOX GROUP BULLET, PLAYER
         SEAS.addRawInitHitboxGroup('Bullet', [SEAS.getScene().getObject()])
@@ -62,12 +65,17 @@ class Enemy:
 
     def update(self):
         if self.coll.collide[0] and self.coll.collide[1] == 'Bullet':
+            self.pkll.kills += 1
+
+            self.shtr.totalEnemies -= 1
+            self.shtr.spawnLimit *= 0.95
+            self.mSpeed += 1
+
+            SEAS.getScene().removeRawInitObject(self.coll.collide[2])
             SEAS.getScene().removeObject()
 
         # Move towarads player
         self.movePlayer()
-
-
 
     def movePlayer(self):
         # FIND CENTROID

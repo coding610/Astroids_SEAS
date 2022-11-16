@@ -9,7 +9,7 @@ mainScene = SEAS.addScene('mainScene') # I guess u could save it
 # OBJECTS
 playerCords = [ [110, 110], [115, 125], [120, 110] ]
 playerComps = [TransformPoly(playerCords, 90), RenderPoly(), CharacterPolyController(),
-               HitboxPoly(), CollidePoly(), PlayerController(), PlayerShooter()]
+               HitboxPoly(), CollidePoly(), PlayerController(), PlayerShooter(), PlayerKill()]
 mainScene.addObject('player', components=playerComps)
 
 mainScene.addObject('enemySpawner', components=[EnemySpawner()])

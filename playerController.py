@@ -2,10 +2,31 @@ from SEAS import *
 import copy
 import sys
 
+class PlayerKill:
+    def start(self):
+        self.kills = 0
+        SEAS.getScene().addText(
+                font=SEAS.getCoreModule('Font').getFont('regularFont'),
+                textName='Kills',
+                text="Kills: " + str(self.kills),
+                color="#ffffff",
+                position=[
+                        SEAS.getCoreModule('Screen').wW // 2,
+                        50])
+        
+
+    def update(self):
+        if 'Kills' in SEAS.getScene().texts:
+            SEAS.getScene().updateText(
+                    font=SEAS.getCoreModule('Font').getFont('regularFont'),
+                    text="Kills: " + str(self.kills),
+                    textName='Kills',
+                    color="#ffffff")
+        
 
 class PlayerController:
     def start(self):
-        self.rotAcc = 400
+        self.rotAcc = 300
         self.rotVel = 0
 
         self.acc = 200
@@ -53,6 +74,7 @@ class PlayerShooter:
         self.trns = SEAS.getScene().getComponent('TransformPoly')
         self.ctrl = SEAS.getScene().getComponent('CharacterPolyController')
         self.coll = SEAS.getScene().getComponent('CollidePoly')
+        self.ammo = SEAS.getScene().getRawComponent('ammunitionSpawner', 'AmmunitionSpawner')
 
         self.useP = SEAS.getScene().getComponent('TransformPoly').points[1]
         self.makeCords = [self.useP, [ self.useP[0]-3, self.useP[1]-13 ], [ self.useP[0]+3, self.useP[1]-13 ]]
@@ -63,7 +85,8 @@ class PlayerShooter:
         self.spamTimeoutCounter = 0
         self.spamCounter = 0
         self.spamSpeed = 1
-        self.bulletCount = 50
+        self.bulletCount = 0
+
         
         SEAS.getScene().addText(
                 font=SEAS.getCoreModule('Font').getFont('regularFont'),
@@ -89,6 +112,7 @@ class PlayerShooter:
     def checkAmmo(self):
         if self.coll.collide[0] and self.coll.collide[1] == "Ammo":
             self.bulletCount += 10
+            self.ammo.totalAmmo -= 1
             SEAS.getScene().removeRawInitObject(self.coll.collide[2])
 
     def shootBullet(self):
@@ -135,7 +159,7 @@ class Bullet:
         self.trns = SEAS.getScene().getComponent('TransformPoly')
         self.coll = SEAS.getScene().getRawComponent('bullet', 'CollidePoly')
         self.ctrl = SEAS.getScene().getComponent('CharacterPolyController')
-        self.bulletSpeed = 10
+        self.bulletSpeed = 20
 
         SEAS.addRawInitHitboxGroup('Bullet', [SEAS.getScene().getObject()])
 
@@ -143,7 +167,4 @@ class Bullet:
         self.ctrl.move(self.bulletSpeed)
 
         if not self.trns.isVisible:
-            SEAS.getScene().removeObject()
-
-        if self.coll.collide[0] and self.coll.collide[1] == 'Bullet':
             SEAS.getScene().removeObject()
